@@ -68,7 +68,7 @@ PORT=5000
 MONGODB_URI=mongodb://127.0.0.1:27017/enigma
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD_HASH=<your_bcrypt_hash>
-JWT_SECRET=supersecretjwtkey
+JWT_SECRET=<your_secure_random_secret>
 ```
 Start the backend server:
 ```bash
