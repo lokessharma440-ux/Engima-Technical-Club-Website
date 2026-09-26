@@ -1,3 +1,4 @@
+import { getImageUrl } from '../utils/getImageUrl';
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -38,7 +39,7 @@ const Events = () => {
       className="neo-card p-0 flex flex-col group bg-[#FAFAFA] border-4 border-black hover:-translate-y-2 transition-transform"
     >
       <div className="relative border-b-4 border-black overflow-hidden bg-[#FAFAFA]">
-        <img src={event.image?.startsWith('http') ? event.image : `http://localhost:5000${event.image}`} alt={event.title} className="w-full h-auto block group-hover:scale-105 transition-transform duration-500" onError={(e) => { e.target.onerror = null; e.target.src = event.image; }} />
+        <img src={getImageUrl(event.image)} alt={event.title} className="w-full h-auto block group-hover:scale-105 transition-transform duration-500" onError={(e) => { e.target.onerror = null; e.target.src = event.image; }} />
         <div className="absolute top-4 right-4 bg-primary px-3 py-1 text-xs font-black text-black border-2 border-black neo-shadow-sm uppercase tracking-widest">
           {event.category}
         </div>

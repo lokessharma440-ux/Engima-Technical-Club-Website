@@ -1,3 +1,4 @@
+import { getImageUrl } from '../../utils/getImageUrl';
 import React, { useState, useEffect } from 'react';
 import api from '../../api';
 import { Pencil, Trash2, Plus, X, Image as ImageIcon } from 'lucide-react';
@@ -9,7 +10,7 @@ const AchievementsManager = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   
-  const [formData, setFormData] = useState({ title: '', description: '', date: '', category: '' });
+  const [formData, setFormData] = useState({ title: '', description: '', date: '', category: '', image: null });
   const [file, setFile] = useState(null);
 
   useEffect(() => { fetchAchievements(); }, []);
@@ -22,10 +23,10 @@ const AchievementsManager = () => {
   const openModal = (item = null) => {
     if (item) {
       setEditingId(item._id);
-      setFormData({ title: item.title, description: item.description, date: item.date || '', category: item.category || '' });
+      setFormData({ title: item.title, description: item.description, date: item.date || '', category: item.category || '', image: item.image || null });
     } else {
       setEditingId(null);
-      setFormData({ title: '', description: '', date: '', category: 'Competition' });
+      setFormData({ title: '', description: '', date: '', category: 'Competition', image: null });
     }
     setFile(null); setIsModalOpen(true);
   };
@@ -79,7 +80,7 @@ const AchievementsManager = () => {
             {achievements.map(a => (
               <tr key={a._id} className="border-b-2 border-gray-200">
                 <td className="p-4 border-r-2 border-black">
-                  {a.image ? <img src={`http://localhost:5000${a.image}`} className="w-16 h-12 object-cover border-2 border-black" alt={a.title}/> : <ImageIcon/>}
+                  {a.image ? <img src={getImageUrl(a.image)} className="w-16 h-12 object-cover border-2 border-black" alt={a.title}/> : <ImageIcon/>}
                 </td>
                 <td className="p-4 font-bold border-r-2 border-black">{a.title}</td>
                 <td className="p-4 font-bold border-r-2 border-black">{a.date}</td>
@@ -109,7 +110,15 @@ const AchievementsManager = () => {
                 <div><label className="block font-black uppercase mb-1">Category</label><input type="text" name="category" value={formData.category} onChange={e=>setFormData({...formData, category: e.target.value})} className="w-full p-2 border-2 border-black" /></div>
               </div>
               <div><label className="block font-black uppercase mb-1">Description *</label><textarea name="description" value={formData.description} onChange={e=>setFormData({...formData, description: e.target.value})} required className="w-full p-2 border-2 border-black h-20" /></div>
-              <div><label className="block font-black uppercase mb-1">Image / Certificate</label><input type="file" onChange={e => setFile(e.target.files[0])} accept="image/*" className="w-full p-2 border-2 border-black bg-gray-50" /></div>
+              <div>
+                <label className="block font-black uppercase mb-1">Image / Certificate</label>
+                <div className="flex items-center gap-4">
+                  {(file || formData.image) && (
+                    <img src={file ? URL.createObjectURL(file) : getImageUrl(formData.image)} className="w-16 h-16 object-cover border-2 border-black" alt="Preview"/>
+                  )}
+                  <input type="file" onChange={e => setFile(e.target.files[0])} accept="image/*" className="flex-1 p-2 border-2 border-black bg-gray-50" />
+                </div>
+              </div>
               <div className="pt-4 flex justify-end gap-4">
                 <button type="submit" className="px-6 py-2 bg-black text-white font-black uppercase border-2 border-black hover:-translate-y-1 transition-transform">Save</button>
               </div>

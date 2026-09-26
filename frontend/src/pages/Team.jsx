@@ -1,3 +1,4 @@
+import { getImageUrl } from '../utils/getImageUrl';
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Briefcase, Terminal } from 'lucide-react';
@@ -14,14 +15,9 @@ const normalizeName = (name) => {
 };
 
 const resolveMemberImage = (member) => {
-  // Use CMS-uploaded image if it exists
   if (member.image) {
-    if (member.image.startsWith('http')) return member.image;
-    if (member.image.startsWith('/uploads')) return `http://localhost:5000${member.image}`;
-    return `http://localhost:5000${member.image}`;
+    return getImageUrl(member.image);
   }
-
-  // Fallback to auto-generated avatar if no image provided
   return 'https://ui-avatars.com/api/?name=' + encodeURIComponent(member.name) + '&background=random';
 };
 

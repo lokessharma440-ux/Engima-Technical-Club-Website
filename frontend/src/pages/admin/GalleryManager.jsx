@@ -1,3 +1,4 @@
+import { getImageUrl } from '../../utils/getImageUrl';
 import React, { useState, useEffect } from 'react';
 import api from '../../api';
 import { Trash2, Plus, X, Image as ImageIcon } from 'lucide-react';
@@ -77,7 +78,7 @@ const GalleryManager = () => {
         {images.map(img => (
           <div key={img._id} className="relative group border-4 border-black neo-shadow bg-gray-200 aspect-square">
             {img.image ? (
-              <img src={img.image.startsWith('http') ? img.image : `http://localhost:5000${img.image}`} alt="Gallery item" className="w-full h-full object-cover" />
+              <img src={getImageUrl(img.image)} alt="Gallery item" className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center"><ImageIcon size={48} className="text-gray-400"/></div>
             )}
@@ -100,7 +101,12 @@ const GalleryManager = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block font-black uppercase mb-1">Select Image *</label>
-                <input type="file" onChange={(e) => setFile(e.target.files[0])} accept="image/*" required className="w-full p-2 border-2 border-black bg-gray-50" />
+                <div className="flex flex-col gap-2">
+                  {file && (
+                    <img src={URL.createObjectURL(file)} className="w-32 h-32 object-cover border-2 border-black" alt="Preview"/>
+                  )}
+                  <input type="file" onChange={(e) => setFile(e.target.files[0])} accept="image/*" required className="w-full p-2 border-2 border-black bg-gray-50" />
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>

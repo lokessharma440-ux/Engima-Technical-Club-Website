@@ -1,3 +1,4 @@
+import { getImageUrl } from '../utils/getImageUrl';
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -86,7 +87,7 @@ const EventDetails = () => {
         
         {/* Full-width Banner Poster */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full h-64 md:h-[400px] border-4 border-black relative bg-white mb-12 neo-shadow overflow-hidden">
-          <img src={(event.bannerImage || event.image)?.startsWith('http') ? (event.bannerImage || event.image) : `http://localhost:5000${event.bannerImage || event.image}`} alt={event.title} className="w-full h-full object-cover block" onError={(e) => { e.target.onerror = null; e.target.src = event.bannerImage || event.image; }} />
+          <img src={getImageUrl(event.bannerImage || event.image)} alt={event.title} className="w-full h-full object-cover block" onError={(e) => { e.target.onerror = null; e.target.src = event.bannerImage || event.image; }} />
           <div className="absolute top-4 left-4 bg-primary text-black font-black uppercase tracking-widest px-4 py-2 border-2 border-black neo-shadow-sm z-20">
             {event.category}
           </div>
@@ -109,7 +110,7 @@ const EventDetails = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                   {event.gallery.map((img, i) => (
                     <div key={i} className="h-48 overflow-hidden neo-card p-0 border-4 border-black bg-gray-200">
-                      <img src={img?.startsWith('http') ? img : `http://localhost:5000${img}`} alt={`Gallery image ${i + 1}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                      <img src={getImageUrl(img)} alt={`Gallery image ${i + 1}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
                     </div>
                   ))}
                 </div>

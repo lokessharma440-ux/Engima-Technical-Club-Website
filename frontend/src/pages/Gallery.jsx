@@ -1,3 +1,4 @@
+import { getImageUrl } from '../utils/getImageUrl';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SectionHeader from '../components/SectionHeader';
@@ -38,7 +39,7 @@ const Gallery = () => {
             className={`overflow-hidden border-4 border-black bg-gray-200 relative group neo-shadow ${img.colSpan || 'md:col-span-1'} ${img.rowSpan || 'md:row-span-1'} cursor-pointer hover:-translate-y-1 hover:-translate-x-1 transition-transform`}
           >
             <div className="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 mix-blend-multiply"></div>
-            <img src={img.image?.startsWith('http') ? img.image : `http://localhost:5000${img.image}`} alt={img.title || 'Gallery item'} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 grayscale group-hover:grayscale-0" />
+            <img src={getImageUrl(img.image)} alt={img.title || 'Gallery item'} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 grayscale group-hover:grayscale-0" />
           </motion.div>
         ))}
       </div>

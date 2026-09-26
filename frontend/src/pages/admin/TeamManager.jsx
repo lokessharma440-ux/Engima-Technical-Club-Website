@@ -1,3 +1,4 @@
+import { getImageUrl } from '../../utils/getImageUrl';
 import React, { useState, useEffect } from 'react';
 import api from '../../api';
 import { Pencil, Trash2, Plus, X, Image as ImageIcon } from 'lucide-react';
@@ -15,7 +16,8 @@ const TeamManager = ({ categoryFilter, title }) => {
     category: categoryFilter || 'Technical Team',
     bio: '',
     github: '',
-    linkedin: ''
+    linkedin: '',
+    image: null
   });
   const [file, setFile] = useState(null);
 
@@ -51,7 +53,8 @@ const TeamManager = ({ categoryFilter, title }) => {
         category: member.category,
         bio: member.bio || '',
         github: member.github || '',
-        linkedin: member.linkedin || ''
+        linkedin: member.linkedin || '',
+        image: member.image || null
       });
     } else {
       setEditingId(null);
@@ -61,7 +64,8 @@ const TeamManager = ({ categoryFilter, title }) => {
         category: categoryFilter || 'Technical Team',
         bio: '',
         github: '',
-        linkedin: ''
+        linkedin: '',
+        image: null
       });
     }
     setFile(null);
@@ -131,7 +135,7 @@ const TeamManager = ({ categoryFilter, title }) => {
                 <tr key={member._id} className="border-b-2 border-gray-200 hover:bg-gray-50">
                   <td className="p-4 border-r-2 border-black">
                     {member.image ? (
-                      <img src={`http://localhost:5000${member.image}`} alt={member.name} className="w-12 h-12 object-cover border-2 border-black rounded-full" />
+                      <img src={getImageUrl(member.image)} alt={member.name} className="w-12 h-12 object-cover border-2 border-black rounded-full" />
                     ) : (
                       <div className="w-12 h-12 bg-gray-200 border-2 border-black rounded-full flex items-center justify-center"><ImageIcon size={20}/></div>
                     )}
@@ -180,8 +184,19 @@ const TeamManager = ({ categoryFilter, title }) => {
               </div>
               <div>
                 <label className="block font-black uppercase mb-1">Profile Image</label>
-                <input type="file" onChange={(e) => setFile(e.target.files[0])} accept="image/*" className="w-full p-2 border-2 border-black bg-gray-50" />
-                <p className="text-xs font-bold text-gray-500 mt-1">Leave empty to keep existing image</p>
+                <div className="flex items-center gap-4">
+                  {(file || formData.image) && (
+                    <img 
+                      src={file ? URL.createObjectURL(file) : getImageUrl(formData.image)} 
+                      alt="Preview" 
+                      className="w-16 h-16 object-cover border-2 border-black rounded-full" 
+                    />
+                  )}
+                  <div className="flex-1">
+                    <input type="file" onChange={(e) => setFile(e.target.files[0])} accept="image/*" className="w-full p-2 border-2 border-black bg-gray-50" />
+                    <p className="text-xs font-bold text-gray-500 mt-1">Leave empty to keep existing image</p>
+                  </div>
+                </div>
               </div>
               <div>
                 <label className="block font-black uppercase mb-1">Bio / Specialty</label>

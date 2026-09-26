@@ -1,3 +1,4 @@
+import { getImageUrl } from '../../utils/getImageUrl';
 import React, { useState, useEffect } from 'react';
 import api from '../../api';
 import { Pencil, Trash2, Plus, X, Image as ImageIcon } from 'lucide-react';
@@ -10,7 +11,7 @@ const ProjectsManager = () => {
   const [editingId, setEditingId] = useState(null);
   
   const [formData, setFormData] = useState({
-    title: '', slug: '', description: '', category: '', github: '', liveDemo: '', technologies: ''
+    title: '', slug: '', description: '', category: '', github: '', liveDemo: '', technologies: '', image: null
   });
   const [file, setFile] = useState(null);
 
@@ -29,11 +30,12 @@ const ProjectsManager = () => {
       setFormData({
         title: proj.title, slug: proj.slug, description: proj.description,
         category: proj.category, github: proj.github || '', liveDemo: proj.liveDemo || '',
-        technologies: proj.technologies ? proj.technologies.join(', ') : ''
+        technologies: proj.technologies ? proj.technologies.join(', ') : '',
+        image: proj.image || null
       });
     } else {
       setEditingId(null);
-      setFormData({ title: '', slug: '', description: '', category: 'Web Development', github: '', liveDemo: '', technologies: '' });
+      setFormData({ title: '', slug: '', description: '', category: 'Web Development', github: '', liveDemo: '', technologies: '', image: null });
     }
     setFile(null); setIsModalOpen(true);
   };
@@ -94,7 +96,7 @@ const ProjectsManager = () => {
             {projects.map(p => (
               <tr key={p._id} className="border-b-2 border-gray-200">
                 <td className="p-4 border-r-2 border-black">
-                  {p.image ? <img src={`http://localhost:5000${p.image}`} className="w-16 h-12 object-cover border-2 border-black" alt={p.title}/> : <ImageIcon/>}
+                  {p.image ? <img src={getImageUrl(p.image)} className="w-16 h-12 object-cover border-2 border-black" alt={p.title}/> : <ImageIcon/>}
                 </td>
                 <td className="p-4 font-bold border-r-2 border-black">{p.title}</td>
                 <td className="p-4 font-bold border-r-2 border-black">{p.category}</td>
@@ -131,7 +133,15 @@ const ProjectsManager = () => {
                 <div><label className="block font-black uppercase mb-1">GitHub URL</label><input type="text" name="github" value={formData.github} onChange={e=>setFormData({...formData, github: e.target.value})} className="w-full p-2 border-2 border-black" /></div>
                 <div><label className="block font-black uppercase mb-1">Live Demo URL</label><input type="text" name="liveDemo" value={formData.liveDemo} onChange={e=>setFormData({...formData, liveDemo: e.target.value})} className="w-full p-2 border-2 border-black" /></div>
               </div>
-              <div><label className="block font-black uppercase mb-1">Project Image</label><input type="file" onChange={e => setFile(e.target.files[0])} accept="image/*" className="w-full p-2 border-2 border-black bg-gray-50" /></div>
+              <div>
+                <label className="block font-black uppercase mb-1">Project Image</label>
+                <div className="flex items-center gap-4">
+                  {(file || formData.image) && (
+                    <img src={file ? URL.createObjectURL(file) : getImageUrl(formData.image)} className="w-16 h-16 object-cover border-2 border-black" alt="Preview"/>
+                  )}
+                  <input type="file" onChange={e => setFile(e.target.files[0])} accept="image/*" className="flex-1 p-2 border-2 border-black bg-gray-50" />
+                </div>
+              </div>
               <div className="pt-4 flex justify-end gap-4">
                 <button type="submit" className="px-6 py-2 bg-black text-white font-black uppercase border-2 border-black hover:-translate-y-1 transition-transform">Save</button>
               </div>

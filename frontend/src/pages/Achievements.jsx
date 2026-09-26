@@ -1,3 +1,4 @@
+import { getImageUrl } from '../utils/getImageUrl';
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Trophy } from 'lucide-react';
@@ -60,7 +61,7 @@ const Achievements = () => {
                 {achievement.image && (
                   <div className="h-48 overflow-hidden border-4 border-black bg-gray-200">
                     <img 
-                      src={achievement.image.startsWith('http') ? achievement.image : `http://localhost:5000${achievement.image}`} 
+                      src={getImageUrl(achievement.image)} 
                       alt={achievement.title} 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                     />

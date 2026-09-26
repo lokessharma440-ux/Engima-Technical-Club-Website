@@ -1,3 +1,4 @@
+import { getImageUrl } from '../utils/getImageUrl';
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight, Code, Cpu, Globe, Users, Terminal } from 'lucide-react';
@@ -172,7 +173,7 @@ const Home = () => {
                 className="bg-white text-charcoal border-4 border-charcoal neo-shadow flex flex-col hover:-translate-y-2 transition-transform"
               >
                 <div className="border-b-4 border-charcoal bg-white">
-                  <img src={event.image?.startsWith('http') ? event.image : `http://localhost:5000${event.image}`} alt={event.title} className="w-full h-auto block" onError={(e) => { e.target.onerror = null; e.target.src = event.image; }} />
+                  <img src={getImageUrl(event.image)} alt={event.title} className="w-full h-auto block" onError={(e) => { e.target.onerror = null; e.target.src = event.image; }} />
                 </div>
                 <div className="p-6 flex-grow flex flex-col justify-between">
                   <div>

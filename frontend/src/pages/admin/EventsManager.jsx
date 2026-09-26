@@ -1,3 +1,4 @@
+import { getImageUrl } from '../../utils/getImageUrl';
 import React, { useState, useEffect } from 'react';
 import api from '../../api';
 import { Pencil, Trash2, Plus, X, Image as ImageIcon } from 'lucide-react';
@@ -10,7 +11,7 @@ const EventsManager = () => {
   const [editingId, setEditingId] = useState(null);
   
   const [formData, setFormData] = useState({
-    title: '', slug: '', description: '', category: 'Workshop', date: '', endDate: '', time: '', venue: ''
+    title: '', slug: '', description: '', category: 'Workshop', date: '', endDate: '', time: '', venue: '', image: null, bannerImage: null
   });
   const [file, setFile] = useState(null);
   const [bannerFile, setBannerFile] = useState(null);
@@ -32,11 +33,12 @@ const EventsManager = () => {
       setEditingId(evt._id);
       setFormData({
         title: evt.title, slug: evt.slug, description: evt.description, category: evt.category,
-        date: evt.date, endDate: evt.endDate ? evt.endDate.split('T')[0] : '', time: evt.time, venue: evt.venue
+        date: evt.date, endDate: evt.endDate ? evt.endDate.split('T')[0] : '', time: evt.time, venue: evt.venue,
+        image: evt.image || null, bannerImage: evt.bannerImage || null
       });
     } else {
       setEditingId(null);
-      setFormData({ title: '', slug: '', description: '', category: 'Workshop', date: '', endDate: '', time: '', venue: '' });
+      setFormData({ title: '', slug: '', description: '', category: 'Workshop', date: '', endDate: '', time: '', venue: '', image: null, bannerImage: null });
     }
     setFile(null);
     setBannerFile(null);
@@ -124,7 +126,7 @@ const EventsManager = () => {
             {events.map(e => (
               <tr key={e._id} className="border-b-2 border-gray-200">
                 <td className="p-4 border-r-2 border-black">
-                  {e.image ? <img src={`http://localhost:5000${e.image}`} className="w-16 h-12 object-cover border-2 border-black" alt={e.title}/> : <ImageIcon/>}
+                  {e.image ? <img src={getImageUrl(e.image)} className="w-16 h-12 object-cover border-2 border-black" alt={e.title}/> : <ImageIcon/>}
                 </td>
                 <td className="p-4 font-bold border-r-2 border-black">{e.title}</td>
                 <td className="p-4 font-bold border-r-2 border-black">{e.category}</td>
@@ -164,8 +166,24 @@ const EventsManager = () => {
               </div>
               <div><label className="block font-black uppercase mb-1">Category *</label><input type="text" name="category" value={formData.category} onChange={e=>setFormData({...formData, category: e.target.value})} required className="w-full p-2 border-2 border-black" /></div>
               <div className="grid grid-cols-2 gap-4">
-                <div><label className="block font-black uppercase mb-1">Outer Card Poster</label><input type="file" onChange={e => setFile(e.target.files[0])} accept="image/*" className="w-full p-2 border-2 border-black bg-gray-50" /></div>
-                <div><label className="block font-black uppercase mb-1">Inner Wide Banner</label><input type="file" onChange={e => setBannerFile(e.target.files[0])} accept="image/*" className="w-full p-2 border-2 border-black bg-gray-50" /></div>
+                <div>
+                  <label className="block font-black uppercase mb-1">Outer Card Poster</label>
+                  <div className="flex flex-col gap-2">
+                    {(file || formData.image) && (
+                      <img src={file ? URL.createObjectURL(file) : getImageUrl(formData.image)} className="w-16 h-12 object-cover border-2 border-black" alt="Preview"/>
+                    )}
+                    <input type="file" onChange={e => setFile(e.target.files[0])} accept="image/*" className="w-full p-2 border-2 border-black bg-gray-50" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block font-black uppercase mb-1">Inner Wide Banner</label>
+                  <div className="flex flex-col gap-2">
+                    {(bannerFile || formData.bannerImage) && (
+                      <img src={bannerFile ? URL.createObjectURL(bannerFile) : getImageUrl(formData.bannerImage)} className="w-full h-12 object-cover border-2 border-black" alt="Preview"/>
+                    )}
+                    <input type="file" onChange={e => setBannerFile(e.target.files[0])} accept="image/*" className="w-full p-2 border-2 border-black bg-gray-50" />
+                  </div>
+                </div>
               </div>
               <div><label className="block font-black uppercase mb-1">Description *</label><textarea name="description" value={formData.description} onChange={e=>setFormData({...formData, description: e.target.value})} required className="w-full p-2 border-2 border-black h-20" /></div>
               <div className="pt-4 flex justify-end gap-4">
@@ -188,7 +206,7 @@ const EventsManager = () => {
               {galleryModalEvent.gallery && galleryModalEvent.gallery.length > 0 ? (
                 galleryModalEvent.gallery.map((img, idx) => (
                   <div key={idx} className="relative group border-4 border-black aspect-square bg-gray-200">
-                    <img src={img.startsWith('http') ? img : `http://localhost:5000${img}`} className="w-full h-full object-cover" alt="" />
+                    <img src={getImageUrl(img)} className="w-full h-full object-cover" alt="" />
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                       <button onClick={() => handleGalleryRemove(img)} className="p-2 bg-red-500 border-2 border-black hover:bg-red-600"><Trash2 className="text-white" size={20}/></button>
                     </div>
