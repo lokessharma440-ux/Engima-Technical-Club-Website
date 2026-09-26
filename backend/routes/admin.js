@@ -2,8 +2,8 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
 
 import TeamMember from '../models/TeamMember.js';
 import Event from '../models/Event.js';
@@ -15,18 +15,25 @@ import Settings from '../models/Settings.js';
 
 const router = express.Router();
 
-// Multer Config
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const dir = 'uploads/';
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
-    cb(null, dir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
+// ---------------------------------------------------
+// CLOUDINARY + MULTER CONFIG
+// ---------------------------------------------------
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'enigma-technical-club',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
   }
 });
+
 const fileFilter = (req, file, cb) => {
   if (file.mimetype.startsWith('image/')) {
     cb(null, true);
@@ -34,9 +41,12 @@ const fileFilter = (req, file, cb) => {
     cb(new Error('Not an image! Please upload an image.'), false);
   }
 };
-export const upload = multer({ 
+
+export const upload = multer({
   storage,
-  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB limit
+  limits: {
+    fileSize: 20 * 1024 * 1024
+  },
   fileFilter
 });
 
@@ -143,10 +153,10 @@ const createCrudRoutes = (Model, uploadField = 'image') => {
     try {
       const data = { ...req.body };
       if (req.files && req.files.length > 0) {
-        req.files.forEach(file => {
-          data[file.fieldname] = `/uploads/${file.filename}`;
-        });
-      }
+  req.files.forEach(file => {
+    data[file.fieldname] = file.path;
+  });
+}
       const newItem = new Model(data);
       await newItem.save();
       res.status(201).json(newItem);
@@ -157,10 +167,10 @@ const createCrudRoutes = (Model, uploadField = 'image') => {
     try {
       const data = { ...req.body };
       if (req.files && req.files.length > 0) {
-        req.files.forEach(file => {
-          data[file.fieldname] = `/uploads/${file.filename}`;
-        });
-      }
+  req.files.forEach(file => {
+    data[file.fieldname] = file.path;
+  });
+}
       const updatedItem = await Model.findByIdAndUpdate(req.params.id, data, { new: true });
       res.json(updatedItem);
     } catch (err) { res.status(500).json({ error: err.message }); }
@@ -405,7 +415,7 @@ router.post('/events/:id/gallery', adminAuth, upload.array('images', 100), async
     const event = await Event.findById(req.params.id);
     if (!event) return res.status(404).json({ error: 'Event not found' });
     
-    const newImages = req.files.map(file => `/uploads/${file.filename}`);
+    const newImages = req.files.map(file => file.path);
     event.gallery = [...(event.gallery || []), ...newImages];
     
     await event.save();
