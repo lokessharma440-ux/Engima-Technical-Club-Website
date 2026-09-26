@@ -90,7 +90,7 @@ const Home = () => {
                     {/* Stat 2 */}
                     <div className="bg-[#e6f0ff] border-[3px] border-charcoal neo-shadow-sm p-4 flex flex-col justify-center">
                       <div className="text-[10px] md:text-xs font-bold text-charcoal/60 uppercase tracking-widest mb-1">Team Heads</div>
-                      <div className="text-3xl md:text-4xl font-black text-charcoal leading-none tracking-tight"><CountUp to={17} /></div>
+                      <div className="text-3xl md:text-4xl font-black text-charcoal leading-none tracking-tight"><CountUp to={14} /></div>
                     </div>
                     {/* Stat 3 */}
                     <div className="bg-[#e6f0ff] border-[3px] border-charcoal neo-shadow-sm p-4 flex flex-col justify-center">

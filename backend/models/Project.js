@@ -6,9 +6,12 @@ const projectSchema = new mongoose.Schema({
   description: { type: String, required: true },
   detailedDescription: { type: String },
   image: { type: String },
+  outerImage: { type: String },
+  innerImage: { type: String },
   technologies: [{ type: String }],
-  category: { type: String, required: true }, // Web Development, AI/ML, etc.
+  category: { type: String, required: true },
   teamMembers: [{ type: String }],
+  developedBy: { type: String },
   github: { type: String },
   liveDemo: { type: String },
   screenshots: [{ type: String }]
