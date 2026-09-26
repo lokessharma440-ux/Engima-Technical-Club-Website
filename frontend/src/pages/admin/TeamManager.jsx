@@ -80,11 +80,12 @@ const TeamManager = ({ categoryFilter, title }) => {
 
     try {
       if (editingId) {
-        await api.put(`/admin/members/${editingId}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
+        const res = await api.put(`/admin/members/${editingId}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
+        setMembers(prev => prev.map(m => m._id === editingId ? res.data : m));
       } else {
-        await api.post('/admin/members', data, { headers: { 'Content-Type': 'multipart/form-data' } });
+        const res = await api.post('/admin/members', data, { headers: { 'Content-Type': 'multipart/form-data' } });
+        setMembers(prev => [res.data, ...prev]);
       }
-      fetchMembers();
       setIsModalOpen(false);
     } catch (err) {
       alert('Error saving data');
@@ -96,7 +97,7 @@ const TeamManager = ({ categoryFilter, title }) => {
     if (!window.confirm('Are you sure you want to delete this record?')) return;
     try {
       await api.delete(`/admin/members/${id}`);
-      fetchMembers();
+      setMembers(prev => prev.filter(m => m._id !== id));
     } catch (err) {
       alert('Error deleting');
     }

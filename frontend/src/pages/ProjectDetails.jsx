@@ -1,3 +1,4 @@
+import { getImageUrl } from '../utils/getImageUrl';
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -35,7 +36,7 @@ const ProjectDetails = () => {
         
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="neo-card p-0 mb-16 overflow-hidden">
           <div className="w-full h-[40vh] md:h-[50vh] border-b-4 border-black relative bg-gray-200">
-            <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
+            <img src={getImageUrl(project.innerImage || project.image)} alt={project.title} className="w-full h-full object-cover" />
           </div>
           
           <div className="p-8 md:p-12 bg-white">
@@ -81,17 +82,15 @@ const ProjectDetails = () => {
                   </div>
                 </div>
                 
-                <div>
-                  <h3 className="text-xl font-black mb-6 flex items-center uppercase tracking-widest border-b-4 border-primary pb-2 inline-block"><Users className="text-black mr-2" strokeWidth={3} /> Team</h3>
-                  <ul className="space-y-4">
-                    {project.teamMembers?.map((member, i) => (
-                      <li key={i} className="text-gray-800 flex items-center font-bold text-lg">
-                        <div className="w-4 h-4 bg-primary border-2 border-black mr-4 neo-shadow-sm"></div>
-                        {member}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                {project.developedBy && (
+                  <div>
+                    <h3 className="text-xl font-black mb-6 flex items-center uppercase tracking-widest border-b-4 border-primary pb-2 inline-block"><Users className="text-black mr-2" strokeWidth={3} /> Developed By</h3>
+                    <div className="text-gray-800 flex items-center font-bold text-lg">
+                      <div className="w-4 h-4 bg-primary border-2 border-black mr-4 neo-shadow-sm"></div>
+                      {project.developedBy}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
