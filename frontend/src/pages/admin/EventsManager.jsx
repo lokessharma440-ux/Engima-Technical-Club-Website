@@ -56,14 +56,9 @@ const EventsManager = () => {
     if (bannerFile) data.append('bannerImage', bannerFile);
 
     try {
-      if (editingId) {
-        const res = await api.put(`/admin/events/${editingId}`, data);
-        setEvents(prev => prev.map(evt => evt._id === editingId ? res.data : evt));
-      } else {
-        const res = await api.post('/admin/events', data);
-        setEvents(prev => [res.data, ...prev]);
-      }
-      setIsModalOpen(false);
+      if (editingId) await api.put(`/admin/events/${editingId}`, data);
+      else await api.post('/admin/events', data);
+      fetchEvents(); setIsModalOpen(false);
     } catch (err) { alert('Error saving data'); }
   };
 
@@ -71,7 +66,7 @@ const EventsManager = () => {
     if (!window.confirm('Delete this event?')) return;
     try { 
       await api.delete(`/admin/events/${id}`); 
-      setEvents(prev => prev.filter(evt => evt._id !== id)); 
+      fetchEvents(); 
     } catch (err) { 
       console.error('Delete error:', err.response || err);
       alert('Error deleting: ' + (err.response?.data?.error || err.message)); 
@@ -92,7 +87,7 @@ const EventsManager = () => {
       const res = await api.post(`/admin/events/${galleryModalEvent._id}/gallery`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
       setGalleryFiles([]);
       setGalleryModalEvent(res.data);
-      setEvents(prev => prev.map(evt => evt._id === res.data._id ? res.data : evt));
+      fetchEvents();
     } catch (err) { alert('Error uploading images'); }
   };
 
@@ -101,7 +96,7 @@ const EventsManager = () => {
     try {
       const res = await api.put(`/admin/events/${galleryModalEvent._id}/gallery/remove`, { imgPath });
       setGalleryModalEvent(res.data);
-      setEvents(prev => prev.map(evt => evt._id === res.data._id ? res.data : evt));
+      fetchEvents();
     } catch (err) { alert('Error removing image'); }
   };
 

@@ -11,10 +11,9 @@ const ProjectsManager = () => {
   const [editingId, setEditingId] = useState(null);
   
   const [formData, setFormData] = useState({
-    title: '', slug: '', description: '', category: '', github: '', liveDemo: '', technologies: '', developedBy: '', image: null, outerImage: null, innerImage: null
+    title: '', slug: '', description: '', category: '', github: '', liveDemo: '', technologies: '', image: null
   });
-  const [outerFile, setOuterFile] = useState(null);
-  const [innerFile, setInnerFile] = useState(null);
+  const [file, setFile] = useState(null);
 
   useEffect(() => { fetchProjects(); }, []);
 
@@ -32,14 +31,13 @@ const ProjectsManager = () => {
         title: proj.title, slug: proj.slug, description: proj.description,
         category: proj.category, github: proj.github || '', liveDemo: proj.liveDemo || '',
         technologies: proj.technologies ? proj.technologies.join(', ') : '',
-        developedBy: proj.developedBy || '',
-        image: proj.image || null, outerImage: proj.outerImage || null, innerImage: proj.innerImage || null
+        image: proj.image || null
       });
     } else {
       setEditingId(null);
-      setFormData({ title: '', slug: '', description: '', category: 'Web Development', github: '', liveDemo: '', technologies: '', developedBy: '', image: null, outerImage: null, innerImage: null });
+      setFormData({ title: '', slug: '', description: '', category: 'Web Development', github: '', liveDemo: '', technologies: '', image: null });
     }
-    setOuterFile(null); setInnerFile(null); setIsModalOpen(true);
+    setFile(null); setIsModalOpen(true);
   };
 
   const handleSubmit = async (e) => {
@@ -49,22 +47,16 @@ const ProjectsManager = () => {
       if (k === 'technologies') {
         const techs = formData[k].split(',').map(t => t.trim()).filter(Boolean);
         techs.forEach(t => data.append('technologies[]', t));
-      } else if (k !== 'image' && k !== 'outerImage' && k !== 'innerImage') {
+      } else {
         data.append(k, formData[k]);
       }
     });
-    if (outerFile) data.append('outerImage', outerFile);
-    if (innerFile) data.append('innerImage', innerFile);
+    if (file) data.append('image', file);
 
     try {
-      if (editingId) {
-        const res = await api.put(`/admin/projects/${editingId}`, data);
-        setProjects(prev => prev.map(p => p._id === editingId ? res.data : p));
-      } else {
-        const res = await api.post('/admin/projects', data);
-        setProjects(prev => [res.data, ...prev]);
-      }
-      setIsModalOpen(false);
+      if (editingId) await api.put(`/admin/projects/${editingId}`, data);
+      else await api.post('/admin/projects', data);
+      fetchProjects(); setIsModalOpen(false);
     } catch (err) { alert('Error saving data'); }
   };
 
@@ -72,7 +64,7 @@ const ProjectsManager = () => {
     if (!window.confirm('Delete this project?')) return;
     try { 
       await api.delete(`/admin/projects/${id}`); 
-      setProjects(prev => prev.filter(p => p._id !== id)); 
+      fetchProjects(); 
     } catch (err) { 
       console.error('Delete error:', err.response || err);
       alert('Error deleting: ' + (err.response?.data?.error || err.message)); 
@@ -104,7 +96,7 @@ const ProjectsManager = () => {
             {projects.map(p => (
               <tr key={p._id} className="border-b-2 border-gray-200">
                 <td className="p-4 border-r-2 border-black">
-                  {(p.outerImage || p.image) ? <img src={getImageUrl(p.outerImage || p.image)} className="w-16 h-12 object-cover border-2 border-black" alt={p.title}/> : <ImageIcon/>}
+                  {p.image ? <img src={getImageUrl(p.image)} className="w-16 h-12 object-cover border-2 border-black" alt={p.title}/> : <ImageIcon/>}
                 </td>
                 <td className="p-4 font-bold border-r-2 border-black">{p.title}</td>
                 <td className="p-4 font-bold border-r-2 border-black">{p.category}</td>
@@ -141,27 +133,13 @@ const ProjectsManager = () => {
                 <div><label className="block font-black uppercase mb-1">GitHub URL</label><input type="text" name="github" value={formData.github} onChange={e=>setFormData({...formData, github: e.target.value})} className="w-full p-2 border-2 border-black" /></div>
                 <div><label className="block font-black uppercase mb-1">Live Demo URL</label><input type="text" name="liveDemo" value={formData.liveDemo} onChange={e=>setFormData({...formData, liveDemo: e.target.value})} className="w-full p-2 border-2 border-black" /></div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div><label className="block font-black uppercase mb-1">Developed By</label><input type="text" name="developedBy" value={formData.developedBy} onChange={e=>setFormData({...formData, developedBy: e.target.value})} className="w-full p-2 border-2 border-black" placeholder="e.g. Lokesh Sharma"/></div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block font-black uppercase mb-1">Outer Image (Thumbnail)</label>
-                  <div className="flex flex-col gap-2">
-                    {(outerFile || formData.outerImage || formData.image) && (
-                      <img src={outerFile ? URL.createObjectURL(outerFile) : getImageUrl(formData.outerImage || formData.image)} className="w-full h-24 object-cover border-2 border-black" alt="Preview"/>
-                    )}
-                    <input type="file" onChange={e => setOuterFile(e.target.files[0])} accept="image/*" className="w-full p-2 border-2 border-black bg-gray-50" />
-                  </div>
-                </div>
-                <div>
-                  <label className="block font-black uppercase mb-1">Inner Image (Detail Hero)</label>
-                  <div className="flex flex-col gap-2">
-                    {(innerFile || formData.innerImage || formData.image) && (
-                      <img src={innerFile ? URL.createObjectURL(innerFile) : getImageUrl(formData.innerImage || formData.image)} className="w-full h-24 object-cover border-2 border-black" alt="Preview"/>
-                    )}
-                    <input type="file" onChange={e => setInnerFile(e.target.files[0])} accept="image/*" className="w-full p-2 border-2 border-black bg-gray-50" />
-                  </div>
+              <div>
+                <label className="block font-black uppercase mb-1">Project Image</label>
+                <div className="flex items-center gap-4">
+                  {(file || formData.image) && (
+                    <img src={file ? URL.createObjectURL(file) : getImageUrl(formData.image)} className="w-16 h-16 object-cover border-2 border-black" alt="Preview"/>
+                  )}
+                  <input type="file" onChange={e => setFile(e.target.files[0])} accept="image/*" className="flex-1 p-2 border-2 border-black bg-gray-50" />
                 </div>
               </div>
               <div className="pt-4 flex justify-end gap-4">

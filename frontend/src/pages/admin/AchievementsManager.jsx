@@ -38,14 +38,9 @@ const AchievementsManager = () => {
     if (file) data.append('image', file);
 
     try {
-      if (editingId) {
-        const res = await api.put(`/admin/achievements/${editingId}`, data);
-        setAchievements(prev => prev.map(a => a._id === editingId ? res.data : a));
-      } else {
-        const res = await api.post('/admin/achievements', data);
-        setAchievements(prev => [res.data, ...prev]);
-      }
-      setIsModalOpen(false);
+      if (editingId) await api.put(`/admin/achievements/${editingId}`, data);
+      else await api.post('/admin/achievements', data);
+      fetchAchievements(); setIsModalOpen(false);
     } catch (err) { alert('Error saving data'); }
   };
 
@@ -53,7 +48,7 @@ const AchievementsManager = () => {
     if (!window.confirm('Delete this achievement?')) return;
     try { 
       await api.delete(`/admin/achievements/${id}`); 
-      setAchievements(prev => prev.filter(a => a._id !== id)); 
+      fetchAchievements(); 
     } catch (err) { 
       console.error('Delete error:', err.response || err);
       alert('Error deleting: ' + (err.response?.data?.error || err.message)); 

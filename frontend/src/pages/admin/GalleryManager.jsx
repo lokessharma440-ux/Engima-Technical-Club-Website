@@ -41,8 +41,8 @@ const GalleryManager = () => {
     data.append('rowSpan', formData.rowSpan);
 
     try {
-      const res = await api.post('/admin/gallery', data, { headers: { 'Content-Type': 'multipart/form-data' } });
-      setImages(prev => [res.data, ...prev]);
+      await api.post('/admin/gallery', data, { headers: { 'Content-Type': 'multipart/form-data' } });
+      fetchImages();
       setIsModalOpen(false);
       setFile(null);
     } catch (err) {
@@ -54,7 +54,7 @@ const GalleryManager = () => {
     if (!window.confirm('Delete this image?')) return;
     try {
       await api.delete(`/admin/gallery/${id}`);
-      setImages(prev => prev.filter(img => img._id !== id));
+      fetchImages();
     } catch (err) {
       alert('Error deleting');
     }

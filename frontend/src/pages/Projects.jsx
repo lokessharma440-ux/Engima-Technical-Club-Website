@@ -44,7 +44,7 @@ const Projects = () => {
             className="neo-card p-0 flex flex-col group bg-white border-4 border-black hover:-translate-y-2 transition-transform"
           >
             <div className="h-64 overflow-hidden relative border-b-4 border-black bg-gray-200">
-              <img src={getImageUrl(project.outerImage || project.image)} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <img src={getImageUrl(project.image)} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               <div className="absolute top-4 right-4 bg-primary px-3 py-1 text-xs font-black text-black border-2 border-black neo-shadow-sm uppercase tracking-widest">
                 {project.category}
               </div>
