@@ -439,4 +439,17 @@ router.put('/events/:id/gallery/remove', adminAuth, async (req, res) => {
   }
 });
 
+router.put('/events/:id/gallery/remove-all', adminAuth, async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ error: 'Event not found' });
+    
+    event.gallery = [];
+    await event.save();
+    res.json(event);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 export default router;

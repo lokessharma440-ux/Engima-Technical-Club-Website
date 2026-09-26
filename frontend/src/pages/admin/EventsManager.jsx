@@ -105,6 +105,15 @@ const EventsManager = () => {
     } catch (err) { alert('Error removing image'); }
   };
 
+  const handleGalleryRemoveAll = async () => {
+    if (!window.confirm('Are you sure you want to delete ALL images from this gallery? This cannot be undone.')) return;
+    try {
+      const res = await api.put(`/admin/events/${galleryModalEvent._id}/gallery/remove-all`);
+      setGalleryModalEvent(res.data);
+      setEvents(prev => prev.map(evt => evt._id === res.data._id ? res.data : evt));
+    } catch (err) { alert('Error removing all images'); }
+  };
+
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -204,7 +213,12 @@ const EventsManager = () => {
           <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white border-4 border-black w-full max-w-4xl max-h-[90vh] overflow-y-auto neo-shadow p-6">
             <div className="flex justify-between items-center mb-6 border-b-4 border-black pb-2">
               <h3 className="text-2xl font-black uppercase">Gallery: {galleryModalEvent.title}</h3>
-              <button onClick={() => setGalleryModalEvent(null)}><X size={28} /></button>
+              <div className="flex gap-4 items-center">
+                {galleryModalEvent.gallery && galleryModalEvent.gallery.length > 0 && (
+                  <button onClick={handleGalleryRemoveAll} className="px-3 py-1 bg-red-500 text-white font-black uppercase border-2 border-black hover:-translate-y-1 transition-transform text-sm">Delete All</button>
+                )}
+                <button onClick={() => setGalleryModalEvent(null)}><X size={28} /></button>
+              </div>
             </div>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
