@@ -32,7 +32,7 @@ const EventDetails = () => {
   if (event.title) {
     const lowerTitle = event.title.toLowerCase();
     if (lowerTitle.includes('dsa')) displayCount = 120;
-    if (lowerTitle.includes('tech quiz') || lowerTitle.includes('tech quic')) displayCount = 90;
+    if (lowerTitle.includes('tech quiz') || lowerTitle.includes('tech quic') || lowerTitle.includes('technical quiz')) displayCount = 90;
   }
 
   const eventStatus = getEventStatus(event.date);
