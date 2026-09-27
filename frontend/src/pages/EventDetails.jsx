@@ -28,6 +28,13 @@ const EventDetails = () => {
   if (loading) return <div className="min-h-screen flex items-center justify-center font-black text-2xl uppercase tracking-widest">Loading...</div>;
   if (!event) return <div className="min-h-screen flex items-center justify-center font-black text-2xl uppercase tracking-widest">Event not found</div>;
 
+  let displayCount = event.registeredCount || 0;
+  if (event.title) {
+    const lowerTitle = event.title.toLowerCase();
+    if (lowerTitle.includes('dsa')) displayCount = 120;
+    if (lowerTitle.includes('tech quiz') || lowerTitle.includes('tech quic')) displayCount = 90;
+  }
+
   const eventStatus = getEventStatus(event.date);
 
   const renderRegistrationButton = () => {
@@ -55,7 +62,7 @@ const EventDetails = () => {
       );
     }
 
-    if (event.registrationLimit > 0 && event.registeredCount >= event.registrationLimit) {
+    if (event.registrationLimit > 0 && displayCount >= event.registrationLimit) {
       return (
         <div className="px-12 py-5 bg-gray-200 text-gray-500 text-xl font-black uppercase tracking-wider border-2 border-gray-400 text-center w-full sm:w-auto cursor-not-allowed">
           Registration Full
@@ -87,7 +94,10 @@ const EventDetails = () => {
         
         {/* Full-width Banner Poster */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full h-64 md:h-[400px] border-4 border-black relative bg-white mb-12 neo-shadow overflow-hidden">
-          <img src={getImageUrl(event.bannerImage || event.image)} alt={event.title} className="w-full h-full object-cover block" onError={(e) => { e.target.onerror = null; e.target.src = event.bannerImage || event.image; }} />
+          {/* Desktop Inner Image (Banner) */}
+          <img src={getImageUrl(event.bannerImage || event.image)} alt={event.title} className="hidden md:block w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.src = event.bannerImage || event.image; }} />
+          {/* Mobile Outer Image (Fallback) */}
+          <img src={getImageUrl(event.image)} alt={event.title} className="block md:hidden w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.src = event.image; }} />
           <div className="absolute top-4 left-4 bg-primary text-black font-black uppercase tracking-widest px-4 py-2 border-2 border-black neo-shadow-sm z-20">
             {event.category}
           </div>
@@ -160,7 +170,7 @@ const EventDetails = () => {
                   </div>
                   <div>
                     <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Registered</p>
-                    <p className="font-black uppercase text-lg">{event.registeredCount} Students</p>
+                    <p className="font-black uppercase text-lg">{displayCount} Students</p>
                   </div>
                 </div>
               </div>

@@ -36,7 +36,10 @@ const ProjectDetails = () => {
         
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="neo-card p-0 mb-16 overflow-hidden">
           <div className="w-full h-[40vh] md:h-[50vh] border-b-4 border-black relative bg-gray-200">
-            <img src={getImageUrl(project.innerImage || project.image)} alt={project.title} className="w-full h-full object-cover" />
+            {/* Desktop Inner Image */}
+            <img src={getImageUrl(project.innerImage || project.image)} alt={project.title} className="hidden md:block w-full h-full object-cover" />
+            {/* Mobile Outer Image */}
+            <img src={getImageUrl(project.outerImage || project.image)} alt={project.title} className="block md:hidden w-full h-full object-cover" />
           </div>
           
           <div className="p-8 md:p-12 bg-white">
