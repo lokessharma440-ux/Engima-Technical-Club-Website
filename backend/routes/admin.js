@@ -65,10 +65,16 @@ export const adminAuth = (req, res, next) => {
 
 // LOGIN & LOGOUT
 router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-  if (username !== process.env.ADMIN_USERNAME) {
+  const username = (req.body.username || '').trim();
+  const password = (req.body.password || '').trim();
+  
+  const envUsername = (process.env.ADMIN_USERNAME || '').trim();
+  
+  // Case-insensitive comparison for mobile auto-capitalization
+  if (username.toLowerCase() !== envUsername.toLowerCase()) {
     return res.status(401).json({ error: 'Invalid credentials' });
   }
+  
   const isMatch = await bcrypt.compare(password, process.env.ADMIN_PASSWORD_HASH);
   if (!isMatch) {
     return res.status(401).json({ error: 'Invalid credentials' });
