@@ -58,25 +58,25 @@ const About = () => {
       {/* Stats Section */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
-        className="neo-card p-12 bg-charcoal text-white relative overflow-hidden"
+        className="neo-card p-12 relative overflow-hidden"
       >
         <div className="absolute top-0 left-0 w-full h-4 bg-primary border-b-4 border-black"></div>
         <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-8 pt-4 text-center">
           <div>
             <div className="text-6xl md:text-8xl font-black text-primary mb-2" style={{ WebkitTextStroke: '2px black' }}>50+</div>
-            <div className="text-white font-bold uppercase tracking-widest text-sm">Events Conducted</div>
+            <div className="text-charcoal font-bold uppercase tracking-widest text-sm">Events Conducted</div>
           </div>
           <div>
             <div className="text-6xl md:text-8xl font-black text-primary mb-2" style={{ WebkitTextStroke: '2px black' }}>1.2k</div>
-            <div className="text-white font-bold uppercase tracking-widest text-sm">Active Members</div>
+            <div className="text-charcoal font-bold uppercase tracking-widest text-sm">Active Members</div>
           </div>
           <div>
             <div className="text-6xl md:text-8xl font-black text-primary mb-2" style={{ WebkitTextStroke: '2px black' }}>30+</div>
-            <div className="text-white font-bold uppercase tracking-widest text-sm">Workshops</div>
+            <div className="text-charcoal font-bold uppercase tracking-widest text-sm">Workshops</div>
           </div>
           <div>
             <div className="text-6xl md:text-8xl font-black text-primary mb-2" style={{ WebkitTextStroke: '2px black' }}>15</div>
-            <div className="text-white font-bold uppercase tracking-widest text-sm">Major Projects</div>
+            <div className="text-charcoal font-bold uppercase tracking-widest text-sm">Major Projects</div>
           </div>
         </div>
       </motion.div>
