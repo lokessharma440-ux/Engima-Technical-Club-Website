@@ -9,16 +9,13 @@ const SectionHeader = ({ number, title, description, dark = false }) => {
       viewport={{ once: true }}
       className={`mb-16 border-l-4 border-black pl-6 ${dark ? 'text-white border-primary' : 'text-charcoal'}`}
     >
-      <div className="flex items-center gap-4 mb-4">
-        {number && (
+      {number && (
+        <div className="flex items-center gap-4 mb-2">
           <span className={`font-mono text-sm font-bold px-2 py-1 border-2 border-black ${dark ? 'bg-primary text-black' : 'bg-primary text-black'} neo-shadow-sm`}>
             {number}
           </span>
-        )}
-        <span className="tracking-widest uppercase text-sm font-bold">
-          {title}
-        </span>
-      </div>
+        </div>
+      )}
       <h2 className={`text-4xl md:text-5xl font-bold mb-4 uppercase leading-tight ${dark ? 'text-white' : 'text-charcoal'}`}>
         {title}
       </h2>
