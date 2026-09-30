@@ -2,7 +2,8 @@ import { getImageUrl } from '../utils/getImageUrl';
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Code, ExternalLink, Github } from 'lucide-react';
+import { Code, ExternalLink } from 'lucide-react';
+import { FaGithub } from 'react-icons/fa6';
 import api from '../api';
 import SectionHeader from '../components/SectionHeader';
 
@@ -71,7 +72,7 @@ const Projects = () => {
                 <div className="flex gap-6">
                   {project.github && project.github !== '#' && (
                     <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-charcoal hover:text-primary transition-colors flex items-center gap-2 font-black uppercase tracking-widest">
-                      <Github size={20} strokeWidth={2.5} /> View on GitHub
+                      <FaGithub size={20} /> View on GitHub
                     </a>
                   )}
                   {project.liveDemo && project.liveDemo !== '#' && (

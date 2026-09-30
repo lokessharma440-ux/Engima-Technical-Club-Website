@@ -2,7 +2,8 @@ import { getImageUrl } from '../utils/getImageUrl';
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Github, ExternalLink, Users, Tag, Code } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Users, Tag, Code } from 'lucide-react';
+import { FaGithub } from 'react-icons/fa6';
 import api from '../api';
 
 const ProjectDetails = () => {
@@ -55,7 +56,7 @@ const ProjectDetails = () => {
             <div className="flex flex-wrap gap-6 mb-12 pb-12 border-b-4 border-black">
               {project.github && project.github !== '#' && (
                 <a href={project.github} target="_blank" rel="noopener noreferrer" className="flex items-center px-8 py-4 bg-white text-black border-2 border-black font-black uppercase tracking-widest neo-btn">
-                  <Github size={24} className="mr-3" strokeWidth={2.5} /> View Source
+                  <FaGithub size={24} className="mr-3" /> View Source
                 </a>
               )}
               {project.liveDemo && project.liveDemo !== '#' && (
