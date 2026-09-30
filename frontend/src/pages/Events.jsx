@@ -1,7 +1,7 @@
 import { getImageUrl } from '../utils/getImageUrl';
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Calendar, MapPin, Clock } from 'lucide-react';
 import api from '../api';
 import SectionHeader from '../components/SectionHeader';
@@ -10,6 +10,10 @@ const Events = () => {
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [previousEvents, setPreviousEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const filterCategory = queryParams.get('category');
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -79,41 +83,54 @@ const Events = () => {
     </motion.div>
   );
 
+  const displayedUpcoming = filterCategory 
+    ? upcomingEvents.filter(e => e.category && e.category.toLowerCase().includes(filterCategory.toLowerCase()))
+    : upcomingEvents;
+    
+  const displayedPrevious = filterCategory
+    ? previousEvents.filter(e => e.category && e.category.toLowerCase().includes(filterCategory.toLowerCase()))
+    : previousEvents;
+
   return (
     <div className="min-h-screen py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <SectionHeader 
         number="02"
-        title="Events & Workshops"
-        description="Discover our upcoming hackathons, technical sessions, and hands-on workshops."
+        title={filterCategory ? `${filterCategory} Events` : "Events & Workshops"}
+        description={filterCategory ? `Showing all ${filterCategory} events.` : "Discover our upcoming hackathons, technical sessions, and hands-on workshops."}
       />
 
-      {upcomingEvents.length > 0 && (
+      {displayedUpcoming.length > 0 && (
         <div className="mb-24">
           <h2 className="text-3xl md:text-4xl font-black mb-10 uppercase text-charcoal border-l-8 border-primary pl-4">Upcoming Events</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {upcomingEvents.map((event, idx) => (
+            {displayedUpcoming.map((event, idx) => (
               <EventCard key={event._id} event={event} idx={idx} isUpcoming={true} />
             ))}
           </div>
         </div>
       )}
 
-      {previousEvents.length > 0 && (
+      {displayedPrevious.length > 0 && (
         <div>
           <h2 className="text-3xl md:text-4xl font-black mb-10 uppercase text-charcoal border-l-8 border-primary pl-4">Previous Events</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 opacity-90 grayscale-[0.2]">
-            {previousEvents.map((event, idx) => (
+            {displayedPrevious.map((event, idx) => (
               <EventCard key={event._id} event={event} idx={idx} isUpcoming={false} />
             ))}
           </div>
         </div>
       )}
       
-      {upcomingEvents.length === 0 && previousEvents.length === 0 && (
+      {displayedUpcoming.length === 0 && displayedPrevious.length === 0 && (
         <div className="text-center py-20">
-          <p className="text-2xl font-bold uppercase tracking-widest text-gray-500">No events found.</p>
+          <h3 className="text-3xl font-black uppercase text-charcoal mb-4">No events found</h3>
+          <p className="text-lg font-medium text-gray-600">Check back later for new {filterCategory ? filterCategory : ''} events!</p>
         </div>
       )}
+
+
+      
+
     </div>
   );
 };

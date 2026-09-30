@@ -120,10 +120,10 @@ const Home = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: <Code size={32} strokeWidth={2.5} />, title: "Hackathons", desc: "Collaborative problem-solving and 24-hour coding events." },
-              { icon: <Cpu size={32} strokeWidth={2.5} />, title: "Workshops", desc: "Hands-on sessions on modern technologies." },
-              { icon: <Globe size={32} strokeWidth={2.5} />, title: "Web Dev", desc: "Building scalable and beautiful web applications." },
-              { icon: <Users size={32} strokeWidth={2.5} />, title: "Community", desc: "Connect, learn, and grow with like-minded peers." }
+              { icon: <Code size={32} strokeWidth={2.5} />, title: "Hackathons", desc: "Collaborative problem-solving and 24-hour coding events.", link: "/events?category=Hackathon" },
+              { icon: <Cpu size={32} strokeWidth={2.5} />, title: "Workshops", desc: "Hands-on sessions on modern technologies.", link: "/events?category=Workshop" },
+              { icon: <Globe size={32} strokeWidth={2.5} />, title: "Web Dev", desc: "Building scalable and beautiful web applications.", link: "/events?category=Web Dev" },
+              { icon: <Users size={32} strokeWidth={2.5} />, title: "Community", desc: "Connect, learn, and grow with like-minded peers.", link: "/team" }
             ].map((item, idx) => (
               <motion.div 
                 key={idx}
@@ -131,11 +131,12 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="neo-card p-8 flex flex-col h-full bg-background"
               >
-                <div className="text-charcoal mb-6 bg-primary inline-block p-3 border-2 border-charcoal neo-shadow-sm self-start">{item.icon}</div>
-                <h3 className="text-2xl font-black mb-3 uppercase text-charcoal">{item.title}</h3>
-                <p className="text-charcoal/80 font-medium flex-grow">{item.desc}</p>
+                <Link to={item.link} className="neo-card p-8 flex flex-col h-full bg-background group cursor-pointer block hover:bg-gray-50">
+                  <div className="text-charcoal mb-6 bg-primary inline-block p-3 border-2 border-charcoal neo-shadow-sm self-start group-hover:-translate-y-1 transition-transform">{item.icon}</div>
+                  <h3 className="text-2xl font-black mb-3 uppercase text-charcoal group-hover:text-primary transition-colors">{item.title}</h3>
+                  <p className="text-charcoal/80 font-medium flex-grow">{item.desc}</p>
+                </Link>
               </motion.div>
             ))}
           </div>
