@@ -22,11 +22,11 @@ const About = () => {
           <div className="flex items-center mb-8">
             <span className="text-black font-black uppercase tracking-widest text-sm border-2 border-black px-3 py-1 bg-white neo-shadow-sm">// The Manifesto</span>
           </div>
-          <p className="text-charcoal leading-relaxed text-2xl md:text-4xl font-bold uppercase tracking-tight">
+          <p className="text-charcoal leading-relaxed text-lg md:text-2xl font-bold uppercase tracking-tight">
             Enigma is the official technical club of the Computer Science & Engineering department at Ambalika Institute of Management & Technology — a place where students learn by building, teach by sharing, and grow by competing. We are student-run, student-built, and student-led.
           </p>
           <div className="w-full h-2 bg-black my-8"></div>
-          <p className="text-black leading-none text-4xl md:text-6xl font-black uppercase">
+          <p className="text-black leading-none text-3xl md:text-4xl font-black uppercase">
             We exist to turn curiosity into craft.
           </p>
         </motion.div>
