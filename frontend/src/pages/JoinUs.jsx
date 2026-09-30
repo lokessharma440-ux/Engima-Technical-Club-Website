@@ -44,6 +44,7 @@ const JoinUs = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!accepting) return;
     setSubmitting(true);
     setError('');
     
@@ -129,16 +130,17 @@ const JoinUs = () => {
         >
           {loadingConfig ? (
             <div className="py-20 text-center font-black uppercase text-xl text-gray-500 animate-pulse">Loading Application Form...</div>
-          ) : !accepting ? (
-            <div className="py-20 text-center">
-              <div className="inline-block p-4 rounded-full bg-red-100 border-4 border-black mb-6 neo-shadow-sm">
-                <Award className="text-red-500" size={48} strokeWidth={2.5} />
-              </div>
-              <h3 className="text-3xl font-black uppercase mb-4 text-charcoal">Not Accepting Applications</h3>
-              <p className="font-bold text-gray-600 text-lg">We are not accepting applications right now. Please check back later.</p>
-            </div>
           ) : (
             <>
+              {!accepting && (
+                <div className="bg-red-100 border-4 border-black p-6 mb-10 text-center neo-shadow-sm flex flex-col items-center">
+                  <div className="inline-block p-3 rounded-full bg-white border-2 border-black mb-4">
+                    <Award className="text-red-500" size={32} strokeWidth={2.5} />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-black uppercase text-charcoal mb-2">We Are Not Accepting Applications Right Now</h3>
+                  <p className="font-bold text-gray-800 text-lg">Please check back later.</p>
+                </div>
+              )}
               <h2 className="text-3xl font-black mb-10 flex items-center uppercase tracking-tight text-charcoal border-b-4 border-black pb-4">
                 <Award className="text-black mr-4" size={36} strokeWidth={2.5} /> Application Form
               </h2>
@@ -200,8 +202,8 @@ const JoinUs = () => {
             </div>
 
             <div className="pt-8 mt-8 border-t-4 border-black">
-                <button type="submit" disabled={submitting} className="w-full sm:w-auto px-10 py-5 bg-primary text-black font-black text-lg uppercase tracking-widest border-4 border-black neo-btn hover:-translate-y-1 hover:translate-x-1 transition-transform disabled:opacity-50 disabled:hover:transform-none flex justify-center items-center">
-                  {submitting ? 'Submitting...' : 'Submit Application'}
+                <button type="submit" disabled={submitting || !accepting} className="w-full sm:w-auto px-10 py-5 bg-primary text-black font-black text-lg uppercase tracking-widest border-4 border-black neo-btn hover:-translate-y-1 hover:translate-x-1 transition-transform disabled:opacity-50 disabled:hover:transform-none disabled:cursor-not-allowed flex justify-center items-center">
+                  {submitting ? 'Submitting...' : !accepting ? 'Applications Closed' : 'Submit Application'}
                 </button>
               </div>
             </form>
