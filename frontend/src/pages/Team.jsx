@@ -1,7 +1,7 @@
 import { getImageUrl } from '../utils/getImageUrl';
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Briefcase, Terminal } from 'lucide-react';
+import { Linkedin, Github } from 'lucide-react';
 import api from '../api';
 import SectionHeader from '../components/SectionHeader';
 
@@ -102,10 +102,10 @@ const Team = () => {
                   
                   <div className="flex gap-4 mt-auto">
                     {member.linkedin && member.linkedin !== '#' && (
-                      <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 bg-primary border-2 border-black hover:-translate-y-1 transition-transform neo-shadow-sm"><Briefcase size={20} strokeWidth={2.5} className="text-black" /></a>
+                      <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 bg-primary border-2 border-black hover:-translate-y-1 transition-transform neo-shadow-sm"><Linkedin size={20} strokeWidth={2.5} className="text-black" /></a>
                     )}
                     {member.github && member.github !== '#' && (
-                      <a href={member.github} target="_blank" rel="noopener noreferrer" className="p-2 bg-primary border-2 border-black hover:-translate-y-1 transition-transform neo-shadow-sm"><Terminal size={20} strokeWidth={2.5} className="text-black" /></a>
+                      <a href={member.github} target="_blank" rel="noopener noreferrer" className="p-2 bg-primary border-2 border-black hover:-translate-y-1 transition-transform neo-shadow-sm"><Github size={20} strokeWidth={2.5} className="text-black" /></a>
                     )}
                   </div>
                 </motion.div>

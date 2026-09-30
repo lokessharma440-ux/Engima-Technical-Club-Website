@@ -1,5 +1,5 @@
 import React from 'react';
-import { Camera, Briefcase, Terminal, PlayCircle, Mail } from 'lucide-react';
+import { Instagram, Linkedin, Twitter, Youtube, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -32,10 +32,10 @@ const Footer = () => {
           <div>
             <h3 className="text-white font-bold mb-6 text-xl tracking-wide uppercase border-b-2 border-primary inline-block pb-1">Connect</h3>
             <div className="flex flex-wrap gap-3 mb-6">
-              <a href="https://www.instagram.com/enigma_aimt/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white border-2 border-black text-black hover:bg-primary neo-btn flex items-center justify-center"><Camera size={20} strokeWidth={2.5} /></a>
-              <a href="https://www.linkedin.com/in/enigmaaimt/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white border-2 border-black text-black hover:bg-primary neo-btn flex items-center justify-center"><Briefcase size={20} strokeWidth={2.5} /></a>
-              <a href="https://x.com/enigma_aimt" target="_blank" rel="noopener noreferrer" className="p-3 bg-white border-2 border-black text-black hover:bg-primary neo-btn flex items-center justify-center"><Terminal size={20} strokeWidth={2.5} /></a>
-              <a href="https://www.youtube.com/channel/UCAtnV1qVl-98-OztBtI8oDw" target="_blank" rel="noopener noreferrer" className="p-3 bg-white border-2 border-black text-black hover:bg-primary neo-btn flex items-center justify-center"><PlayCircle size={20} strokeWidth={2.5} /></a>
+              <a href="https://www.instagram.com/enigma_aimt/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white border-2 border-black text-black hover:bg-primary neo-btn flex items-center justify-center"><Instagram size={20} strokeWidth={2.5} /></a>
+              <a href="https://www.linkedin.com/in/enigmaaimt/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white border-2 border-black text-black hover:bg-primary neo-btn flex items-center justify-center"><Linkedin size={20} strokeWidth={2.5} /></a>
+              <a href="https://x.com/enigma_aimt" target="_blank" rel="noopener noreferrer" className="p-3 bg-white border-2 border-black text-black hover:bg-primary neo-btn flex items-center justify-center"><Twitter size={20} strokeWidth={2.5} /></a>
+              <a href="https://www.youtube.com/channel/UCAtnV1qVl-98-OztBtI8oDw" target="_blank" rel="noopener noreferrer" className="p-3 bg-white border-2 border-black text-black hover:bg-primary neo-btn flex items-center justify-center"><Youtube size={20} strokeWidth={2.5} /></a>
               <a href="mailto:enigma@ambalika.co.in" className="p-3 bg-white border-2 border-black text-black hover:bg-primary neo-btn flex items-center justify-center"><Mail size={20} strokeWidth={2.5} /></a>
             </div>
             <a href="mailto:enigma@ambalika.co.in" className="text-primary font-bold bg-black inline-block px-3 py-1 border-2 border-primary hover:bg-primary hover:text-black hover:border-black transition-colors">enigma@ambalika.co.in</a>
