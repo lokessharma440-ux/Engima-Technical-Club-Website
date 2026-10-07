@@ -17,7 +17,8 @@ const TeamManager = ({ categoryFilter, title }) => {
     bio: '',
     github: '',
     linkedin: '',
-    image: null
+    image: null,
+    year: '2nd Year'
   });
   const [file, setFile] = useState(null);
 
@@ -54,7 +55,8 @@ const TeamManager = ({ categoryFilter, title }) => {
         bio: member.bio || '',
         github: member.github || '',
         linkedin: member.linkedin || '',
-        image: member.image || null
+        image: member.image || null,
+        year: member.year || '2nd Year'
       });
     } else {
       setEditingId(null);
@@ -65,7 +67,8 @@ const TeamManager = ({ categoryFilter, title }) => {
         bio: '',
         github: '',
         linkedin: '',
-        image: null
+        image: null,
+        year: '2nd Year'
       });
     }
     setFile(null);
@@ -182,6 +185,18 @@ const TeamManager = ({ categoryFilter, title }) => {
                     </select>
                   </div>
                 )}
+                <div>
+                  <label className="block font-black uppercase mb-1">Year *</label>
+                  <select name="year" value={formData.year} onChange={handleChange} className="w-full p-2 border-2 border-black bg-white">
+                    <option value="1st Year">1st Year</option>
+                    <option value="2nd Year">2nd Year</option>
+                    <option value="3rd Year">3rd Year</option>
+                    <option value="4th Year">4th Year</option>
+                    <option value="Alumni">Alumni</option>
+                    <option value="Faculty">Faculty</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
               </div>
               <div>
                 <label className="block font-black uppercase mb-1">Profile Image</label>
