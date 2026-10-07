@@ -67,14 +67,25 @@ const Team = () => {
         description="The brilliant minds driving the ENIGMA Technical Club forward."
       />
 
-      {categoriesOrder.map((category, index) => (
-        categorizedTeam[category] && categorizedTeam[category].length > 0 && (
+      {categoriesOrder.map((category, index) => {
+        if (!categorizedTeam[category]) return null;
+
+        const displayMembers = categorizedTeam[category].filter(member => 
+          category === 'Coordinator' || 
+          category === 'Mentors' || 
+          member.role === 'Team Head' || 
+          member.role?.toLowerCase().includes('head')
+        );
+
+        if (displayMembers.length === 0) return null;
+
+        return (
           <div key={category} className="mb-24">
             <h2 className="text-3xl md:text-4xl font-black mb-10 pl-6 border-l-8 border-primary uppercase text-charcoal tracking-tight">
               {category === 'Coordinator' ? 'Faculty Coordinators' : category}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {categorizedTeam[category].map((member, idx) => (
+              {displayMembers.map((member, idx) => (
                 <motion.div 
                   key={member._id}
                   initial={{ opacity: 0, y: 20 }}
@@ -112,8 +123,58 @@ const Team = () => {
               ))}
             </div>
           </div>
-        )
-      ))}
+        );
+      })}
+
+      {/* Second Year Members Section */}
+      {(() => {
+        const secondYearMembers = team.filter(member => member.year === '2nd Year');
+        if (secondYearMembers.length === 0) return null;
+
+        return (
+          <div className="mb-24">
+            <h2 className="text-3xl md:text-4xl font-black mb-10 pl-6 border-l-8 border-primary uppercase text-charcoal tracking-tight">
+              Second Year Members
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {secondYearMembers.map((member, idx) => (
+                <motion.div 
+                  key={member._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="neo-card p-6 flex flex-col items-center text-center group"
+                >
+                  <div className="relative mb-8 w-full">
+                    <div className="aspect-square w-3/4 mx-auto border-2 border-black neo-shadow-sm overflow-hidden bg-gray-100">
+                      <img src={resolveMemberImage(member)} alt={member.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onError={(e) => { e.target.onerror = null; e.target.src = resolveMemberImage(member); }} />
+                    </div>
+                    <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-primary text-black text-[10px] font-black uppercase tracking-widest px-4 py-1 border-2 border-black neo-shadow-sm whitespace-nowrap z-10">
+                      {member.category}
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-black mb-1 text-charcoal">{member.name}</h3>
+                  <p className="text-gray-600 text-sm font-bold mb-2 uppercase tracking-wide">{member.role}</p>
+                  
+                  {member.branch && <p className="text-charcoal text-xs font-bold tracking-widest uppercase mb-4 border-t-2 border-b-2 border-black py-1 w-full">{member.branch}</p>}
+                  
+                  <p className="text-gray-700 text-sm mb-6 flex-grow font-medium leading-relaxed">{member.specialty || member.bio}</p>
+                  
+                  <div className="flex gap-4 mt-auto">
+                    {member.linkedin && member.linkedin !== '#' && (
+                      <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 bg-primary border-2 border-black hover:-translate-y-1 transition-transform neo-shadow-sm"><FaLinkedin size={20} className="text-black" /></a>
+                    )}
+                    {member.github && member.github !== '#' && (
+                      <a href={member.github} target="_blank" rel="noopener noreferrer" className="p-2 bg-primary border-2 border-black hover:-translate-y-1 transition-transform neo-shadow-sm"><FaGithub size={20} className="text-black" /></a>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 };

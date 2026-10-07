@@ -11,7 +11,8 @@ const teamMemberSchema = new mongoose.Schema({
   quote: { type: String },
   email: { type: String },
   linkedin: { type: String },
-  github: { type: String }
+  github: { type: String },
+  year: { type: String }
 }, { timestamps: true });
 
 export default mongoose.model('TeamMember', teamMemberSchema);
