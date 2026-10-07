@@ -145,7 +145,7 @@ const TeamManager = ({ categoryFilter, title }) => {
                     )}
                   </td>
                   <td className="p-4 font-bold border-r-2 border-black">{member.name}</td>
-                  <td className="p-4 font-bold border-r-2 border-black">{member.role} {member.role === 'Team Head' && '👑'}</td>
+                  <td className="p-4 font-bold border-r-2 border-black">{member.role}</td>
                   {!categoryFilter && <td className="p-4 font-bold border-r-2 border-black">{member.category}</td>}
                   <td className="p-4 border-r-2 border-black">
                     <div className="flex justify-center gap-2">
