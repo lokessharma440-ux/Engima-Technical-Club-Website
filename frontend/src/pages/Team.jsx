@@ -128,7 +128,21 @@ const Team = () => {
 
       {/* Second Year Members Section */}
       {(() => {
-        const secondYearMembers = team.filter(member => member.year === '2nd Year');
+        const secondYearMembers = team.filter(member => {
+          // Exclude Coordinators and Mentors from this section
+          if (member.category === 'Coordinator' || member.category === 'Mentors') return false;
+          
+          // Exclude Team Heads
+          const isHead = member.role === 'Team Head' || member.role?.toLowerCase().includes('head');
+          if (isHead) return false;
+
+          // Check year information (handle existing data flexibly)
+          const y = member.year ? String(member.year).toLowerCase() : '';
+          const isSecondYear = y.includes('2') || y.includes('second') || y === ''; // fallback for missing year
+          
+          return isSecondYear;
+        });
+
         if (secondYearMembers.length === 0) return null;
 
         return (
